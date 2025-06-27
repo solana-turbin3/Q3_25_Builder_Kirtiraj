@@ -9,3 +9,4 @@ rust/target/
 *.pdb
 
 dev-wallet.json
+turbin3-wallet.json
