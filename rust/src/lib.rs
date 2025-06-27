@@ -8,6 +8,7 @@ mod tests {
         pubkey::Pubkey,
         transaction::Transaction,
         hash::hash,
+        message::Message,
     };
     use std::str::FromStr;
     use bs58;
@@ -83,7 +84,7 @@ mod tests {
         let message_bytes = b"I verify my Solana Keypair!";
         let sig = keypair.sign_message(message_bytes);
 
-        let sig_hashed = hash(sig.as_ref());
+        // let sig_hashed = hash(sig.as_ref());
 
         match sig.verify(pubkey.as_ref(), message_bytes) {
             true => println!("Signature verified"),
@@ -98,8 +99,18 @@ mod tests {
             .get_latest_blockhash()
             .expect("Failed to get recent blockhash");
 
+        let balance = rpc_client.get_balance(&keypair.pubkey()).expect("Failed to get balance");
+
+        let message = Message::new_with_blockhash(
+            &[transfer(&keypair.pubkey(), &to_pubkey, balance)],
+            Some(&keypair.pubkey()),
+            &recent_blockhash
+        );
+
+        let fee = rpc_client.get_fee_for_message(&message).expect("Failed to get fee calculator");
+
         let transaction = Transaction::new_signed_with_payer(
-            &[transfer(&keypair.pubkey(), &to_pubkey, 1_000_000)],
+            &[transfer(&keypair.pubkey(), &to_pubkey, balance - fee)],
             Some(&keypair.pubkey()),
             &vec![&keypair],
             recent_blockhash
@@ -107,8 +118,8 @@ mod tests {
 
         let signature = rpc_client
             .send_and_confirm_transaction(&transaction)
-            .expect("Failed to send transaction!");
+            .expect("Failed to send final transaction");
 
-        println!("Success! Check out your TX here : https://explorer.solana.com/tx/{}/?cluster=devnet", signature);
+        println!("Success! Entire balance transferred : https://explorer.solana.com/tx/{}/?cluster=devnet", signature);
     }
 }
