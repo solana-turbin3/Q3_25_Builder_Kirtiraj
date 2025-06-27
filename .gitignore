@@ -1,0 +1,11 @@
+debug/
+rust/debug/
+target/
+rust/target/
+
+**/*.rs.bk
+
+
+*.pdb
+
+dev-wallet.json
