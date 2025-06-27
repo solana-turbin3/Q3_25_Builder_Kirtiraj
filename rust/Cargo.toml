@@ -5,3 +5,4 @@ edition = "2024"
 
 [dependencies]
 solana-sdk = "1.15.2"
+bs58 = "0.4"
