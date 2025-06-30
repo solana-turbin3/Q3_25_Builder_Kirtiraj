@@ -32,7 +32,7 @@ umi.use(signerIdentity(signer));
 				files: [
 					{
 						type: "image/png",
-						uri: "image",
+						uri: image,
 					},
 				],
 			},
@@ -45,4 +45,4 @@ umi.use(signerIdentity(signer));
 	}
 })();
 
-// Your metadata URI : https://devnet.irys.xyz/5gyBVCAne8iR3PGXDjDCavdVs6VG6PsCqskLmksBxJBs
+// Your metadata URI : https://devnet.irys.xyz/VRc2Wi1HC2kVgB4mgWfrfs4xrmfaynXQDXmHbAe2AZC

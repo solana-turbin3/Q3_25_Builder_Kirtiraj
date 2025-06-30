@@ -28,7 +28,7 @@ const mint = generateSigner(umi);
 		mint,
 		name: "RUGDAY",
 		symbol: "RGDAY",
-		uri: "https://devnet.irys.xyz/5gyBVCAne8iR3PGXDjDCavdVs6VG6PsCqskLmksBxJBs",
+		uri: "https://devnet.irys.xyz/VRc2Wi1HC2kVgB4mgWfrfs4xrmfaynXQDXmHbAe2AZC",
 		sellerFeeBasisPoints: percentAmount(5),
 	});
 	let result = await tx.sendAndConfirm(umi);
@@ -42,5 +42,5 @@ const mint = generateSigner(umi);
 })();
 
 // Succesfully Minted! Check out your TX here:
-// https://explorer.solana.com/tx/3DXKZyu6iACYy85iK2YSkSQsfrbwFgPN6QkqMZYJsxpmenxU1wdCFo2kivLM93edEHFSUbXyJY9giihrpvpqsZxX?cluster=devnet
-// Mint Address:  HuENmSGVeE6t9NyEdMdn2QX5LxRGYmq3GaahwqVX6V2G
+// https://explorer.solana.com/tx/3TvVi6u4E1EtN1ARdnDRhdgALemxrPuq3NEaHqrwQYxwgh38iP9y6hHhUR39jiKr5ks4F2JmFYLWoHEX1zBPY12K?cluster=devnet
+// Mint Address:  BRAGnMmBnqZVxgsoGMoB3naE3ChjazY5ZDUrWDTbjU2i
