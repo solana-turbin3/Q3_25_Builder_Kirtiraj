@@ -13,7 +13,8 @@ import {
 import wallet from "../turbin3-wallet.json";
 import base58 from "bs58";
 
-const RPC_ENDPOINT = "https://api.devnet.solana.com";
+// const RPC_ENDPOINT = "https://api.devnet.solana.com";
+const RPC_ENDPOINT = "https://devnet-rpc.shyft.to?api_key=Fki2F6DxrRTH3aeE";
 const umi = createUmi(RPC_ENDPOINT);
 
 let keypair = umi.eddsa.createKeypairFromSecretKey(new Uint8Array(wallet));
@@ -24,23 +25,27 @@ umi.use(mplTokenMetadata());
 const mint = generateSigner(umi);
 
 (async () => {
+	console.log("enter");
 	let tx = createNft(umi, {
 		mint,
-		name: "RUGDAY",
-		symbol: "RGDAY",
-		uri: "https://devnet.irys.xyz/VRc2Wi1HC2kVgB4mgWfrfs4xrmfaynXQDXmHbAe2AZC",
+		name: "ICE Berg",
+		symbol: "ICEBERG",
+		uri: "https://devnet.irys.xyz/7HNStfYTqcm1jqiyCdaimQf7n7e2ZKAULPFw5NhX3eQZ",
 		sellerFeeBasisPoints: percentAmount(5),
 	});
+	console.log("34");
 	let result = await tx.sendAndConfirm(umi);
+	console.log("38");
 	const signature = base58.encode(result.signature);
+	console.log("40");
 
-	console.log(
-		`Succesfully Minted! Check out your TX here:\nhttps://explorer.solana.com/tx/${signature}?cluster=devnet`
-	);
+	// console.log(
+	// 	`Succesfully Minted! Check out your TX here:\nhttps://explorer.solana.com/tx/${signature}?cluster=devnet`
+	// );
 
 	console.log("Mint Address: ", mint.publicKey);
 })();
 
 // Succesfully Minted! Check out your TX here:
-// https://explorer.solana.com/tx/3TvVi6u4E1EtN1ARdnDRhdgALemxrPuq3NEaHqrwQYxwgh38iP9y6hHhUR39jiKr5ks4F2JmFYLWoHEX1zBPY12K?cluster=devnet
-// Mint Address:  BRAGnMmBnqZVxgsoGMoB3naE3ChjazY5ZDUrWDTbjU2i
+// https://explorer.solana.com/tx/3mbsuYU6hmerJ22MkUbUfFijxJSxhDhpQKgwbeWewNhMDmpSaS5UgyEeQMcwW4BuE2AGzXoghNEJBxQrCg3Fw827?cluster=devnet
+// Mint Address:  BVMnkMJD6gNMHwH9VkQ8Wv3aTd8ke1DCuEU4aw8j6Tzn

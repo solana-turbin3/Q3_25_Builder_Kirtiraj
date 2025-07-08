@@ -20,10 +20,10 @@ umi.use(signerIdentity(signer));
 (async () => {
 	try {
 		//1. Load image
-		const image = await readFile("./generug.png");
+		const image = await readFile("./iceberg.jpg");
 		//2. Convert image to generic file.
 		const genericFile = createGenericFile(image, "rugged", {
-			contentType: "image/png",
+			contentType: "image/jpg",
 		});
 		//3. Upload image
 		const [myUri] = await umi.uploader.upload([genericFile]);
@@ -33,4 +33,5 @@ umi.use(signerIdentity(signer));
 	}
 })();
 
-// Your image URI:  https://arweave.net/NBF3Krm2s24jjXVdp7kyvM7z5P17bnAXeokGNMppnKU
+// Your image URI(ft. andre):  https://arweave.net/3VzsARrwvCy8ePstyy5HjfZspYggyYSMi91U7qdSrLYk
+// Your image URI(ft. berg):  https://arweave.net/EiamsGBB5Ub4zfnaqcTcp3CFDtZgHLNsPh3Bmfy8vxUb

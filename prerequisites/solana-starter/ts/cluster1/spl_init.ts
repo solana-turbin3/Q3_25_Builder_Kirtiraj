@@ -24,3 +24,5 @@ const connection = new Connection("https://api.devnet.solana.com", commitment);
 		console.log(`Oops, something went wrong: ${error}`);
 	}
 })();
+
+// 48FGm8L3hQNzKNz2VD15bLvsZuWtmBPHtiaJoH8Ytnuf
