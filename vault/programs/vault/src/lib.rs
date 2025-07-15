@@ -40,6 +40,7 @@ pub struct Initialize<'info> {
     pub vault_state: Account<'info, VaultState>,
 
     #[account(
+        mut,
         seeds = [b"vault", vault_state.key().as_ref()],
         bump
     )]
@@ -76,7 +77,6 @@ pub struct Payment<'info>{
     pub signer: Signer<'info>,
 
     #[account(
-        mut,
         seeds = [b"state", signer.key().as_ref()],
         bump = vault_state.state_bump,
     )]
@@ -134,7 +134,7 @@ pub struct Close<'info>{
     #[account(
         mut,
         seeds = [b"state", signer.key().as_ref()],
-        bump = vault_state.vault_bump,
+        bump = vault_state.state_bump,
         close = signer
     )]
     pub vault_state: Account<'info, VaultState>,
@@ -166,7 +166,7 @@ impl<'info> Close<'info> {
         let signer_seeds = &[&seeds[..]];
 
         let cpi_ctx = CpiContext::new_with_signer(cpi_program,cpi_account, signer_seeds);
-        transfer(cpi_ctx, self.vault.get_lamports())
+        transfer(cpi_ctx, self.vault.lamports())
     }
 }
 

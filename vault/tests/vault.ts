@@ -1,27 +1,37 @@
 import * as anchor from "@coral-xyz/anchor";
 import { Program } from "@coral-xyz/anchor";
 import { Vault } from "../target/types/vault";
+import rawKeypair from "../keypair.json";
+import { Keypair } from "@solana/web3.js";
 
 describe("vault", () => {
 	// Configure the client to use the local cluster.
-	const provider = anchor.AnchorProvider.env();
+	const keypair = Keypair.fromSecretKey(Uint8Array.from(rawKeypair));
+	const provider = new anchor.AnchorProvider(
+		new anchor.web3.Connection(
+			"https://devnet.helius-rpc.com/?api-key=80b71915-acee-4254-8485-31a570b80075",
+			"confirmed"
+		),
+		new anchor.Wallet(keypair),
+		{}
+	);
 	anchor.setProvider(provider);
 
 	const signer = provider.wallet.publicKey;
 
 	const program = anchor.workspace.vault as Program<Vault>;
 
-	const vaultState = anchor.web3.PublicKey.findProgramAddressSync(
+	const [vaultState] = anchor.web3.PublicKey.findProgramAddressSync(
 		[Buffer.from("state"), provider.wallet.publicKey.toBuffer()],
 		program.programId
-	)[0];
+	);
 
-	const vault = anchor.web3.PublicKey.findProgramAddressSync(
+	const [vault] = anchor.web3.PublicKey.findProgramAddressSync(
 		[Buffer.from("vault"), vaultState.toBuffer()],
 		program.programId
-	)[0];
+	);
 
-	it("Is initialized!", async () => {
+	it("Initialize vault!", async () => {
 		const tx = await program.methods
 			.initialize()
 			.accountsPartial({
@@ -95,12 +105,15 @@ describe("vault", () => {
 
 		const initialVaultBalance = await provider.connection.getBalance(vault);
 
-		const closeTx = await program.methods.close().accountsPartial({
-			signer,
-			vaultState,
-			vault,
-			systemProgram: anchor.web3.SystemProgram.programId,
-		});
+		const closeTx = await program.methods
+			.close()
+			.accountsPartial({
+				signer,
+				vaultState,
+				vault,
+				systemProgram: anchor.web3.SystemProgram.programId,
+			})
+			.rpc();
 
 		const finalSignerBalance = await provider.connection.getBalance(signer);
 
@@ -117,4 +130,4 @@ describe("vault", () => {
 // Deployed program :
 // Program Id: EQVUdxnQSqFyAsQ1smUpbY47afHYb7x354BzDHaLnxd9
 
-// Signature: 2qrHNVFR5tDpSWFbvzZJqhcAhEeVY7XnpSTDt5NS8Q7zWtpTbMCCUdNJYX8xhHFvwCP8UfgHe36XetosmRyDZWhh
+// Signature: 3Mn3KymyEZ5PoW12VYXX6kb2zHhVqo3euJE29Dc2tNLf4KBeAWzuvh8Kz5qJVdNb5EuyxSaJeSH3H9rwLZ6tGnVt
