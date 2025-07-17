@@ -5,16 +5,7 @@ import rawKeypair from "../keypair.json";
 import { Keypair } from "@solana/web3.js";
 
 describe("vault", () => {
-	// Configure the client to use the local cluster.
-	const keypair = Keypair.fromSecretKey(Uint8Array.from(rawKeypair));
-	const provider = new anchor.AnchorProvider(
-		new anchor.web3.Connection(
-			"https://devnet.helius-rpc.com/?api-key=80b71915-acee-4254-8485-31a570b80075",
-			"confirmed"
-		),
-		new anchor.Wallet(keypair),
-		{}
-	);
+	const provider = anchor.AnchorProvider.env();
 	anchor.setProvider(provider);
 
 	const signer = provider.wallet.publicKey;
@@ -25,12 +16,10 @@ describe("vault", () => {
 		[Buffer.from("state"), provider.wallet.publicKey.toBuffer()],
 		program.programId
 	);
-
 	const [vault] = anchor.web3.PublicKey.findProgramAddressSync(
 		[Buffer.from("vault"), vaultState.toBuffer()],
 		program.programId
 	);
-
 	it("Initialize vault!", async () => {
 		const tx = await program.methods
 			.initialize()
@@ -97,12 +86,10 @@ describe("vault", () => {
 		console.log("Vault balance before : ", initialVaultBalance);
 		console.log("Vault balance after : ", finalVaultBalance);
 	});
-
 	it("Closes the vault!", async () => {
 		const initialSignerBalance = await provider.connection.getBalance(
 			provider.wallet.publicKey
 		);
-
 		const initialVaultBalance = await provider.connection.getBalance(vault);
 
 		const closeTx = await program.methods
@@ -116,7 +103,6 @@ describe("vault", () => {
 			.rpc();
 
 		const finalSignerBalance = await provider.connection.getBalance(signer);
-
 		const finalVaultBalance = await provider.connection.getBalance(vault);
 
 		console.log("Close Tx Signature : ", closeTx);
