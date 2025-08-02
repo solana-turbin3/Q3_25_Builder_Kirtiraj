@@ -15,7 +15,8 @@ declare_id!("DbXeBiA4WT23AkVdVotTGVNccXXPBXXE8RM2GdpRdkP4");
 pub mod magikmons {
     use super::*;
 
-    pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
-        initialize::handler(ctx)
+    pub fn initialize_player(ctx: Context<InitializePlayer>,name: String) -> Result<()> {
+        ctx.accounts.initialize_player(name)
     }
+
 }

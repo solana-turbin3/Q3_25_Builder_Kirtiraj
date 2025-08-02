@@ -5,5 +5,4 @@ pub const PLAYER_INITIAL_XP: u32 = 0;
 pub const PLAYER_INITIAL_MONSTER_MOVES: usize = 1;
 pub const XP_REWARD_TRAINER: u32 = 50;
 
-pub const REGISTRATION_FEE_LAMPORTS: u64 = 10_000_000; // 0.01 SOL
 pub const NPC_COUNT: usize = 3;

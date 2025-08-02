@@ -16,4 +16,7 @@ pub enum CustomError {
     
     #[msg("Battle is still ongoing")]
     BattleStillOngoing,
+
+    #[msg("Monster fainted!")]
+    MonsterFainted
 }
