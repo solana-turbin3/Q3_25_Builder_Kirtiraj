@@ -8,6 +8,9 @@ dependencies:
   '@coral-xyz/anchor':
     specifier: ^0.31.1
     version: 0.31.1(typescript@5.7.3)
+  '@solana/web3.js':
+    specifier: ^1.98.4
+    version: 1.98.4(typescript@5.7.3)
 
 devDependencies:
   '@types/bn.js':
@@ -178,7 +181,7 @@ packages:
   /@types/connect@3.4.38:
     resolution: {integrity: sha512-K6uROf1LD88uDQqJCktA4yzL1YYAK6NgfsI0v/mTgyPKWsX1CnJ0XPSDhViejru1GcRkLWb8RlzFYJRqGUbaug==}
     dependencies:
-      '@types/node': 12.20.55
+      '@types/node': 24.1.0
     dev: false
 
   /@types/json5@0.0.29:
@@ -206,7 +209,7 @@ packages:
   /@types/ws@7.4.7:
     resolution: {integrity: sha512-JQbbmxZTZehdc2iszGKs5oC3NFnjeay7mtAWrdt7qNtAVK0g19muApzAy4bm9byz79xa2ZnO/BOBC2R8RC5Lww==}
     dependencies:
-      '@types/node': 12.20.55
+      '@types/node': 24.1.0
     dev: false
 
   /@types/ws@8.18.1:

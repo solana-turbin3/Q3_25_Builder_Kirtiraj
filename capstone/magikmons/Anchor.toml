@@ -6,13 +6,13 @@ resolution = true
 skip-lint = false
 
 [programs.localnet]
-magikmons = "DbXeBiA4WT23AkVdVotTGVNccXXPBXXE8RM2GdpRdkP4"
+magikmons = "Ge6s5GhQV5iG96aX2vWDtSEnvh1oRjC9T5JKaNZVsqQp"
 
 [registry]
 url = "https://api.apr.dev"
 
 [provider]
-cluster = "localnet"
+cluster = "http://127.0.0.1:8899"
 wallet = "~/.config/solana/id.json"
 
 [scripts]

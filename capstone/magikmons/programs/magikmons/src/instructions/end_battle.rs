@@ -18,7 +18,7 @@ pub struct EndBattle<'info> {
         mut,
         seeds = [b"battle", signer.key().as_ref()],
         bump,
-        constraint = battle_state.player == signer.key()
+        // constraint = battle_state.player == signer.key()
     )]
     pub battle_state: Account<'info, BattleState>
 }
@@ -30,7 +30,7 @@ impl<'info> EndBattle<'info> {
 
         require!(battle.status != BattleStatus::Active, CustomError::BattleStillOngoing);
 
-        if(battle.status == BattleStatus::PlayerLost) {
+        if battle.status == BattleStatus::PlayerLost {
             msg!("You Lost, No XP awarded.");
             return Ok(())
         }
@@ -38,11 +38,11 @@ impl<'info> EndBattle<'info> {
         let npc_id = battle.npc_id;
         require!(!player.defeated_npcs[npc_id as usize], CustomError::AlreadyDefeated);
 
-        if(npc_id == 0 || npc_id == 1){
+        if npc_id == 0 || npc_id == 1 {
             Self::apply_xp(player, &battle.player_monster)?;
         }
 
-        if(npc_id == 2) {
+        if npc_id == 2 {
             msg!("GYM Leader Defeated - You can claim NFT!")
         }
 
@@ -55,7 +55,7 @@ impl<'info> EndBattle<'info> {
         let mut updated_monster = monster.clone();
         updated_monster.current_xp += 50;
 
-        if(updated_monster.current_xp >= updated_monster.max_xp){
+        if updated_monster.current_xp >= updated_monster.max_xp {
             updated_monster.level += 1;
             updated_monster.max_hp += 20;
             updated_monster.current_hp = updated_monster.max_hp;

@@ -10,7 +10,7 @@ pub struct ExecuteTurn<'info> {
         mut,
         seeds = [b"battle", signer.key().as_ref()],
         bump,
-        constraint = battle_state.player == signer.key()
+        // constraint = battle_state.player == signer.key()
     )]
     pub battle_state: Account<'info, BattleState>
 }
@@ -41,7 +41,7 @@ impl<'info> ExecuteTurn<'info> {
             apply_move(npc_move, player, npc);
         }
 
-        if state.player_monster.current_hp == 0 {
+        if state.player_monster.current_hp <= 0 {
             state.status = BattleStatus::PlayerLost;
             msg!("Player LOST!");
             return Ok(());

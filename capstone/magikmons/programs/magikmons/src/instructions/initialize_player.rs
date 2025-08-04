@@ -17,6 +17,7 @@ pub struct InitializePlayer<'info> {
     )]
     pub player_account: Account<'info, PlayerAccount>,
 
+    /// CHECK: This is a safe PDA used only for receiving lamports (no data access).
     #[account(
         mut,
         seeds = [b"treasury"],

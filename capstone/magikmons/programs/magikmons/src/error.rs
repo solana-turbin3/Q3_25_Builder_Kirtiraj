@@ -18,5 +18,8 @@ pub enum CustomError {
     BattleStillOngoing,
 
     #[msg("Monster fainted!")]
-    MonsterFainted
+    MonsterFainted,
+
+    #[msg("Missing required NFT accounts")]
+    MissingNFTAccounts,
 }
