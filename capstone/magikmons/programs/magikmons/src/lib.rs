@@ -9,7 +9,7 @@ pub use constants::*;
 pub use instructions::*;
 pub use state::*;
 
-declare_id!("CYyTfbRtWdMR5xMTor5kBmcS54WQVnuUM1UybsNsLmdG");
+declare_id!("7drP7t7GV2zfuru8dnKwnj9TRUUZ6mA9pDfMgk6yTrpJ");
 
 #[program]
 pub mod magikmons {

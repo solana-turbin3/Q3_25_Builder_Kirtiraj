@@ -14,7 +14,7 @@ impl GameConfig {
     pub const MAX_NPCS: usize = 20;
     pub const LEN: usize = 8 + 
         32 + 32 + // authority + treasury
-        4 + (Self::MAX_NPCS * 200) + // npc_configs (estimated size)
+        4 + (Self::MAX_NPCS * NPCConfig::LEN) +  // npc_configs (estimated size)
         1 + 1; // total_cities + config_bump
 
     pub fn get_npc_config(&self, npc_id: u8) -> Option<&NPCConfig> {
