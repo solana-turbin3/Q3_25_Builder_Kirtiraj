@@ -22,23 +22,23 @@ impl<'info> InitializeGame<'info> {
     pub fn initialize_game(&mut self, treasury: Pubkey, bumps: &InitializeGameBumps) -> Result<()> {
         let default_npcs = vec![
             NPCConfig {
-                city: CityName::Solaria,
+                city: CityName::TurbineTown,
                 opponent_type: OpponentType::Trainer,
-                name: "DeFi Novice Alice".to_string(),
+                name: "Natty Node Nate".to_string(),
                 monsters: vec!["f001".to_string()],
                 monster_levels: vec![1],
             },
             NPCConfig {
-                city: CityName::Solaria,
+                city: CityName::TurbineTown,
                 opponent_type: OpponentType::Trainer,
-                name: "Yield Farmer Bob".to_string(),
+                name: "Liquidity Lord Andre".to_string(),
                 monsters: vec!["w001".to_string(), "f002".to_string()],
                 monster_levels: vec![2, 2],
             },
             NPCConfig {
-                city: CityName::Solaria,
+                city: CityName::TurbineTown,
                 opponent_type: OpponentType::GymLeader,
-                name: "DeFi Master Carol".to_string(),
+                name: "Devnet Whale Jeff".to_string(),
                 monsters: vec!["l001".to_string(), "f003".to_string(), "w002".to_string()],
                 monster_levels: vec![3, 3, 4],
             },
@@ -52,7 +52,7 @@ impl<'info> InitializeGame<'info> {
             config_bump: bumps.game_config,
         });
 
-        msg!("Game initialized with Solaria city NPCs");
+        msg!("Game initialized with TurbineTown city NPCs");
         Ok(())
     }
 }

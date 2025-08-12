@@ -28,7 +28,7 @@ impl<'info> CreatePlayer<'info> {
         self.player_account.set_inner(PlayerAccount {
             owner: self.signer.key(),
             name,
-            current_city: CityName::Solaria,
+            current_city: CityName::TurbineTown,
             level: 1,
             current_xp: 0,
             max_xp: 100,

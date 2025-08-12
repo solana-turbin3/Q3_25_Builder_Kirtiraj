@@ -3,10 +3,10 @@ use anchor_lang::prelude::*;
 #[derive(Debug)]
 #[derive(AnchorSerialize, AnchorDeserialize, Clone, PartialEq, Eq)]
 pub enum CityName {
-    Solaria,
-    Phantom,
-    Jupiter,
-    Marinade,
+    TurbineTown,
+    SurfpoolCity,
+    SolCity,
+    SuperCity,
 }
 
 #[derive(AnchorSerialize, AnchorDeserialize, Clone, PartialEq, Eq)]

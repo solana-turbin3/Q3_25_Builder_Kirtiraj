@@ -72,10 +72,10 @@ impl<'info> EndBattle<'info> {
 
             if npc_config.opponent_type == OpponentType::GymLeader {
                 let city_name = match npc_config.city {
-                    CityName::Solaria => "solaria",
-                    CityName::Phantom => "phantom",
-                    CityName::Jupiter => "jupiter",
-                    CityName::Marinade => "marinade",
+                    CityName::TurbineTown => "turbine",
+                    CityName::SurfpoolCity => "surfcity",
+                    CityName::SolCity => "solcity",
+                    CityName::SuperCity => "supercity",
                 };
                 
                 if !self.player_account.has_badge(city_name) {

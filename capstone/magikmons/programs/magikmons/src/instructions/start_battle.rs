@@ -55,10 +55,10 @@ impl<'info> StartBattle<'info> {
             );
             
             let city_name = match npc_config.city {
-                CityName::Solaria => "solaria",
-                CityName::Phantom => "phantom",
-                CityName::Jupiter => "jupiter",
-                CityName::Marinade => "marinade",
+                CityName::TurbineTown => "turbine",
+                CityName::SurfpoolCity => "surfcity",
+                CityName::SolCity => "solcity",
+                CityName::SuperCity => "supercity",
             };
             
             require!(

@@ -20,6 +20,7 @@ describe("Magikmons Phase 2", () => {
         // will updated authority to turbin3 wallet
         authority=Keypair.generate();
         testKeypair=Keypair.generate();
+        // treasury will be one of the dev wallet address
         treasury=Keypair.generate();
 
 
@@ -76,19 +77,19 @@ describe("Magikmons Phase 2", () => {
         expect(gameConfigData.npcConfigs).to.have.lengthOf(3); // 
 
         const npc1=gameConfigData.npcConfigs[0];
-        expect(npc1.name).to.equal("DeFi Novice Alice");
+        expect(npc1.name).to.equal("Natty Node Nate");
         expect(npc1.monsters).to.deep.equal(["f001"]);
         expect(npc1.monsterLevels[0]).to.equal(1);
 
         const npc2=gameConfigData.npcConfigs[1];
-        expect(npc2.name).to.equal("Yield Farmer Bob");
+        expect(npc2.name).to.equal("Liquidity Lord Andre");
         expect(npc2.monsters).to.deep.equal(["w001", "f002"]);
         expect(npc2.monsterLevels).to.have.lengthOf(2);
         expect(npc2.monsterLevels[0]).to.equal(2);
         expect(npc2.monsterLevels[1]).to.equal(2);
 
         const npc3=gameConfigData.npcConfigs[2];
-        expect(npc3.name).to.equal("DeFi Master Carol");
+        expect(npc3.name).to.equal("Devnet Whale Jeff");
         expect(npc3.monsters).to.deep.equal(["l001", "f003", "w002"]);
         expect(npc3.monsterLevels).to.have.lengthOf(3);
         expect(npc3.monsterLevels[0]).to.equal(3);
@@ -234,6 +235,7 @@ describe("Magikmons Phase 2", () => {
             const playerAction={ attack: ["damage1"] };
 
             try {
+                await new Promise(r => setTimeout(r, 1000));
                 console.log("<<<EXECUTING TURN>>>")
                 const tx=await program.methods
                     .executeTurn(playerAction)
@@ -338,7 +340,7 @@ describe("Magikmons Phase 2", () => {
 
     it("Travel to different cities", async () => {
         const tx1=await program.methods
-            .travelToCity({ phantom: {} })
+            .travelToCity({ surfpoolCity: {} })
             .accountsPartial({
                 signer: testKeypair.publicKey,
                 playerAccount,
@@ -346,13 +348,13 @@ describe("Magikmons Phase 2", () => {
             .signers([testKeypair])
             .rpc();
 
-        console.log("Travel to Phantom Transaction:", tx1);
+        console.log("Travel to Surf City(Surfpool) Transaction:", tx1);
 
         let playerData=await program.account.playerAccount.fetch(playerAccount);
-        expect(Object.keys(playerData.currentCity)[0]).to.equal("phantom");
+        expect(Object.keys(playerData.currentCity)[0]).to.equal("surfpoolCity");
 
         const tx2=await program.methods
-            .travelToCity({ jupiter: {} })
+            .travelToCity({ solCity: {} })
             .accountsPartial({
                 signer: testKeypair.publicKey,
                 playerAccount,
@@ -360,13 +362,13 @@ describe("Magikmons Phase 2", () => {
             .signers([testKeypair])
             .rpc();
 
-        console.log("Travel to Jupiter Transaction:", tx2);
+        console.log("Travel to Sol City(Solana) Transaction:", tx2);
 
         playerData=await program.account.playerAccount.fetch(playerAccount);
-        expect(Object.keys(playerData.currentCity)[0]).to.equal("jupiter");
+        expect(Object.keys(playerData.currentCity)[0]).to.equal("solCity");
 
         const tx3=await program.methods
-            .travelToCity({ solaria: {} })
+            .travelToCity({ turbineTown: {} })
             .accountsPartial({
                 signer: testKeypair.publicKey,
                 playerAccount,
@@ -374,10 +376,10 @@ describe("Magikmons Phase 2", () => {
             .signers([testKeypair])
             .rpc();
 
-        console.log("Travel back to Solaria Transaction:", tx3);
+        console.log("Travel back to Turbine Town Transaction:", tx3);
 
         playerData=await program.account.playerAccount.fetch(playerAccount);
-        expect(Object.keys(playerData.currentCity)[0]).to.equal("solaria");
+        expect(Object.keys(playerData.currentCity)[0]).to.equal("turbineTown");
 
         console.log("Travel system works correctly");
     });
@@ -385,7 +387,7 @@ describe("Magikmons Phase 2", () => {
     it("Should fail to travel to same city", async () => {
         try {
             await program.methods
-                .travelToCity({ solaria: {} })
+                .travelToCity({ turbineTown: {} })
                 .accountsPartial({
                     signer: testKeypair.publicKey,
                     playerAccount,
@@ -398,44 +400,6 @@ describe("Magikmons Phase 2", () => {
             console.log("Correctly failed when trying to travel to same city");
             expect(error).to.not.be.undefined;
         }
-    });
-
-
-    it("Add new NPC to game config (authority only)", async () => {
-        const npcConfig={
-            city: { solaria: {} },          
-            opponentType: { trainer: {} },   
-            name: "Liquidity Larry",
-            monsters: ["w003", "l002"],      
-            monsterLevels: Buffer.from([3, 4]) 
-        };
-
-        const tx=await program.methods
-            .addNpcToConfig(npcConfig)
-            .accounts({
-                authority: authority.publicKey,
-                gameConfig,
-            })
-            .signers([authority])
-            .rpc();
-
-        console.log("NPC Added Tx:", tx);
-
-        const gameConfigData=await program.account.gameConfig.fetch(gameConfig);
-        const latestNpc=gameConfigData.npcConfigs[gameConfigData.npcConfigs.length-1];
-
-        console.log("GAME CONFIG DATA: ", gameConfigData);
-        console.log("latestNpc : ", latestNpc);
-
-        expect(latestNpc.name).to.equal("Liquidity Larry");
-        expect(latestNpc.monsters).to.deep.equal(["w003", "l002"]);
-        expect(Array.from(latestNpc.monsterLevels)).to.deep.equal([3, 4]);
-    });
-
-
-    it("Should fail to add NPC with non-authority signer", async () => {
-        console.log("Skipping unauthorized NPC addition test due to serialization issues");
-        return;
     });
 
     it("Battle sequence with second trainer if first was defeated", async () => {
@@ -486,6 +450,7 @@ describe("Magikmons Phase 2", () => {
                 const playerAction={ attack: ["damage1"] };
                 try {
                     console.log("<<< EXECUTING TURN >>>");
+                    await new Promise(r => setTimeout(r, 1000));
                     const tx=await program.methods
                         .executeTurn(playerAction)
                         .accountsPartial({
@@ -541,6 +506,122 @@ describe("Magikmons Phase 2", () => {
         } catch (error) {
             console.log("Second battle failed (expected in some cases):", error.message);
         }
+    });
+
+    it("Battle sequence with gym leader after defeating all trainers", async () => {
+        const npcId=2;
+
+        const playerData=await program.account.playerAccount.fetch(playerAccount)
+
+        console.log("PLAYER DATA: ", playerData)
+
+        if (!(playerData.defeatedNpcs[0]&&playerData.defeatedNpcs[1])) {
+            console.log("Skipping gym leader battle - Trainers not defeated!")
+            return;
+        }
+
+        [battleState]=anchor.web3.PublicKey.findProgramAddressSync(
+            [Buffer.from("battle"), testKeypair.publicKey.toBuffer(), Buffer.from([npcId])],
+            program.programId
+        );
+
+        try {
+            const startTx=await program.methods.startBattle(npcId).accountsPartial({
+                signer: testKeypair.publicKey,
+                playerAccount,
+                gameConfig,
+                battleState,
+                systemProgram: anchor.web3.SystemProgram.programId
+            }).signers([testKeypair]).rpc();
+
+            console.log(`\n=== GYM LEADER BATTLE STARTED (NPC ${npcId}) ===`);
+            console.log("Start Battle Transaction Signature:", startTx);
+
+            let battleStateData=await program.account.battleState.fetch(battleState);
+            let turnCount=0;
+            let maxTurns=30;
+
+            while (battleStateData.status.active!==undefined&&turnCount<maxTurns) {
+                console.log(`\n--- Turn ${turnCount+1} ---`);
+                const playerMonster=battleStateData.playerMonsters[battleStateData.activePlayerMonster];
+                const npcMonster=battleStateData.npcMonsters[battleStateData.activeNpcMonster];
+                console.log(`Player Monster (${playerMonster.monsterId}): ${playerMonster.currentHp}/${playerMonster.maxHp} HP`);
+                console.log(`Gym Leader Monster (${npcMonster.monsterId}): ${npcMonster.currentHp}/${npcMonster.maxHp} HP`);
+
+                const playerAction={ attack: ["damage1"] };
+                try {
+                    console.log("<<< EXECUTING TURN >>>");
+                    await new Promise(r => setTimeout(r, 1000));
+                    const tx=await program.methods
+                        .executeTurn(playerAction)
+                        .accountsPartial({
+                            signer: testKeypair.publicKey,
+                            playerAccount,
+                            battleState,
+                        })
+                        .signers([testKeypair])
+                        .rpc();
+
+                    console.log(`Turn ${turnCount+1} Transaction Signature:`, tx);
+
+                    battleStateData=await program.account.battleState.fetch(battleState);
+                    turnCount++;
+                } catch (error) {
+                    console.log("Turn failed:", error.message);
+                    break;
+                }
+            }
+
+            if (battleStateData.status.active===undefined) {
+                console.log("Battle finished - ending battle...");
+                await program.methods
+                    .endBattle()
+                    .accountsPartial({
+                        signer: testKeypair.publicKey,
+                        playerAccount,
+                        gameConfig,
+                        battleState,
+                    })
+                    .signers([testKeypair])
+                    .rpc();
+            }
+
+            console.log("\n=== GYM LEADER BATTLE COMPLETED ===");
+            console.log("Final battle status:", Object.keys(battleStateData.status)[0]);
+        } catch (error) {
+            console.log("Gym leader battle failed:", error.message);
+        }
+    })
+
+    it("Add new NPC to game config (authority only)", async () => {
+        const npcConfig={
+            city: { turbineTown: {} },
+            opponentType: { trainer: {} },
+            name: "Gasless Guru Shrinath",
+            monsters: ["w003", "l002"],
+            monsterLevels: Buffer.from([3, 4])
+        };
+
+        const tx=await program.methods
+            .addNpcToConfig(npcConfig)
+            .accounts({
+                authority: authority.publicKey,
+                gameConfig,
+            })
+            .signers([authority])
+            .rpc();
+
+        console.log("NPC Added Tx:", tx);
+
+        const gameConfigData=await program.account.gameConfig.fetch(gameConfig);
+        const latestNpc=gameConfigData.npcConfigs[gameConfigData.npcConfigs.length-1];
+
+        console.log("GAME CONFIG DATA: ", gameConfigData);
+        console.log("latestNpc : ", latestNpc);
+
+        expect(latestNpc.name).to.equal("Gasless Guru Shrinath");
+        expect(latestNpc.monsters).to.deep.equal(["w003", "l002"]);
+        expect(Array.from(latestNpc.monsterLevels)).to.deep.equal([3, 4]);
     });
 
     it("Should fail to challenge gym leader without defeating all trainers", async () => {
