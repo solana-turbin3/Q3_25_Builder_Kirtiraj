@@ -1,40 +1,59 @@
 import * as anchor from "@coral-xyz/anchor";
 import { Program } from "@coral-xyz/anchor";
 import { Magikmons } from "../target/types/magikmons";
-import { PublicKey, Keypair } from "@solana/web3.js";
+import { PublicKey, Keypair, Transaction, SystemProgram, LAMPORTS_PER_SOL } from "@solana/web3.js";
 import { expect } from "chai";
+import rawKeypair from "../keypair.json"
 
 describe("Magikmons Phase 2", () => {
-    const provider=anchor.AnchorProvider.env();
+    // const provider=anchor.AnchorProvider.env();
+    const authority = Keypair.fromSecretKey(Uint8Array.from(rawKeypair));
+    const provider = new anchor.AnchorProvider(
+		new anchor.web3.Connection("<API_KEY>>", "confirmed"),
+		new anchor.Wallet(authority),
+		{}
+	);
     anchor.setProvider(provider);
     const program=anchor.workspace.Magikmons as Program<Magikmons>;
 
-    let authority: Keypair;
+    // let authority: Keypair;
     let testKeypair: Keypair;
     let gameConfig: PublicKey;
     let playerAccount: PublicKey;
     let battleState: PublicKey;
-    let treasury: PublicKey;
+    let treasury;
 
     before(async () => {
         // will updated authority to turbin3 wallet
-        authority=Keypair.generate();
+        // authority=Keypair.generate();
         testKeypair=Keypair.generate();
         // treasury will be one of the dev wallet address
         treasury=Keypair.generate();
 
 
-        const airdropTx1=await provider.connection.requestAirdrop(
-            authority.publicKey,
-            1*anchor.web3.LAMPORTS_PER_SOL
-        );
-        await provider.connection.confirmTransaction(airdropTx1);
+        // const airdropTx1=await provider.connection.requestAirdrop(
+        //     authority.publicKey,
+        //     Math.floor(0.2 * anchor.web3.LAMPORTS_PER_SOL)
+        // );
+        // await provider.connection.confirmTransaction(airdropTx1);
 
-        const airdropTx2=await provider.connection.requestAirdrop(
-            testKeypair.publicKey,
-            1*anchor.web3.LAMPORTS_PER_SOL
-        );
-        await provider.connection.confirmTransaction(airdropTx2);
+        // const airdropTx2=await provider.connection.requestAirdrop(
+        //     testKeypair.publicKey,
+        //     Math.floor(0.2 * anchor.web3.LAMPORTS_PER_SOL)
+        // );
+        // await provider.connection.confirmTransaction(airdropTx2);
+
+        const tx = new Transaction().add(
+            SystemProgram.transfer({
+                fromPubkey: provider.wallet.publicKey,
+                toPubkey: testKeypair.publicKey,
+                lamports: 1 * LAMPORTS_PER_SOL
+            })
+        )
+
+        const sig = await provider.sendAndConfirm(tx);
+		console.log(`Sent 1 SOL to ${testKeypair.publicKey.toBase58()}`);
+		console.log(`Signature: ${sig}`);
 
 
         [gameConfig]=anchor.web3.PublicKey.findProgramAddressSync(
@@ -151,7 +170,7 @@ describe("Magikmons Phase 2", () => {
 
         const airdropSig=await provider.connection.requestAirdrop(
             newKeypair.publicKey,
-            0.5*anchor.web3.LAMPORTS_PER_SOL
+            0.1*anchor.web3.LAMPORTS_PER_SOL
         );
         await provider.connection.confirmTransaction(airdropSig);
 
