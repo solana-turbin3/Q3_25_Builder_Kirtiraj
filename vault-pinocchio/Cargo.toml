@@ -1,0 +1,13 @@
+[package]
+name = "vault-pinocchio"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["lib", "cdylib"]
+
+[dependencies]
+pinocchio = { git = "https://github.com/anza-xyz/pinocchio.git" }
+pinocchio-log = { git = "https://github.com/anza-xyz/pinocchio.git" }
+pinocchio-pubkey = { git = "https://github.com/anza-xyz/pinocchio.git" }
+pinocchio-system = { git = "https://github.com/anza-xyz/pinocchio.git" }
